@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2018 Michael Simon, Jordan Dohms
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -34,60 +34,56 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Strings;
 
 public class ExtractTokenFromForm extends AbstractExtractionAction {
-	
-	/** Class logger. */
-	@Nonnull
-	private final Logger logger = LoggerFactory.getLogger(ExtractTokenFromForm.class);
 
-	@Nonnull
-	@NotEmpty
-	private String tokenCodeField;
+    /** Class logger. */
+    @Nonnull
+    private final Logger logger = LoggerFactory.getLogger(ExtractTokenFromForm.class);
 
-	public ExtractTokenFromForm() {
-		super();
-	}
+    @Nonnull
+    @NotEmpty
+    private String tokenCodeField;
 
-	public void setTokenCodeField(@Nonnull @NotEmpty final String fieldName) {
-		logger.debug("{} {} is tokencode field from the form", getLogPrefix(), fieldName);
-		ComponentSupport.ifInitializedThrowUnmodifiabledComponentException(this);
-		tokenCodeField = fieldName;
-	}
+    public ExtractTokenFromForm() {
+        super();
+    }
 
+    public void setTokenCodeField(@Nonnull @NotEmpty final String fieldName) {
+        ComponentSupport.ifInitializedThrowUnmodifiabledComponentException(this);
+        tokenCodeField = fieldName;
+    }
 
-	@Override
-        protected void doExecute(@Nonnull final ProfileRequestContext profileRequestContext,
-			@Nonnull final AuthenticationContext authenticationContext) {
-		
-		final HttpServletRequest request = getHttpServletRequest();
+    @Override
+    protected void doExecute(@Nonnull final ProfileRequestContext profileRequestContext,
+                             @Nonnull final AuthenticationContext authenticationContext) {
 
-		if (request == null) {
-			logger.debug("{} Empty HttpServletRequest", getLogPrefix());
-			ActionSupport.buildEvent(profileRequestContext, AuthnEventIds.NO_CREDENTIALS);
-			return;
-		}
+        final HttpServletRequest request = getHttpServletRequest();
 
-		try {
+        if (request == null) {
+            logger.debug("{} Empty HttpServletRequest", getLogPrefix());
+            ActionSupport.buildEvent(profileRequestContext, AuthnEventIds.NO_CREDENTIALS);
+            return;
+        }
 
-			TokenContext tokenCtx = authenticationContext.getSubcontext(TokenContext.class, true);
+        try {
 
-			/** get tokencode from request **/
-			String value = StringSupport.trimOrNull(request.getParameter(tokenCodeField));
+            TokenContext tokenCtx = authenticationContext.getSubcontext(TokenContext.class, true);
 
-			if (Strings.isNullOrEmpty(value)) {
-				logger.debug("{} Empty tokenCode", getLogPrefix());
-				ActionSupport.buildEvent(profileRequestContext, AuthnEventIds.INVALID_CREDENTIALS);
-				return;
-			} else {
-				logger.debug("{} TokenCode: {}", getLogPrefix(), value);
+            /** get tokencode from request **/
+            String value = StringSupport.trimOrNull(request.getParameter(tokenCodeField));
 
-				/** set tokencode to TokenCodeContext **/
-				tokenCtx.setToken(value);
-				logger.debug("Put Token code to the TokenCodeCtx");
-				return;
-			}
+            if (Strings.isNullOrEmpty(value)) {
+                logger.debug("{} Empty tokenCode", getLogPrefix());
+                ActionSupport.buildEvent(profileRequestContext, AuthnEventIds.INVALID_CREDENTIALS);
+                return;
+            } else {
+                /** set tokencode to TokenCodeContext **/
+                tokenCtx.setToken(value);
+                logger.debug("Put Token code to the TokenCodeCtx");
+                return;
+            }
 
-		} catch (Exception e) {
-			logger.warn("{} Login by {} produced exception", getLogPrefix(),  e);
-		}		
-	}
+        } catch (Exception e) {
+            logger.warn("{} Login by {} produced exception", getLogPrefix(),  e);
+        }
+    }
 }

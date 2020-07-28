@@ -28,7 +28,6 @@ import net.shibboleth.utilities.java.support.annotation.constraint.NotEmpty;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import net.shibboleth.utilities.java.support.component.ComponentSupport;
 
-import com.google.common.base.Function;
 import org.opensaml.profile.context.ProfileRequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,9 +60,8 @@ public class TokenGenerator extends AbstractProfileAction {
     protected boolean doPreExecute(ProfileRequestContext profileRequestContext) {
         logger.debug("Entering GenerateNewToken doPreExecute");
 
-        if (!super.doPreExecute(profileRequestContext)) {
+        if (!super.doPreExecute(profileRequestContext))
             return false;
-        }
 
         try {
             AuthenticationContext authenticationContext = profileRequestContext.getSubcontext(AuthenticationContext.class);

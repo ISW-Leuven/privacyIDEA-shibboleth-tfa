@@ -20,7 +20,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.security.auth.Subject;
 
-import com.google.common.base.Function;
 import org.opensaml.profile.context.ProfileRequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
