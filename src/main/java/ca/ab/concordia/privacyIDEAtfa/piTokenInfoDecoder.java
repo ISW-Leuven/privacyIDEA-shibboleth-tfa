@@ -61,13 +61,9 @@ public class piTokenInfoDecoder {
 
     	        JsonObject jo = data.getJsonObject(i);
 
-				System.out.println("decodeTokenList 1");
-
     	        // Only add the token if the token is active
     	        if (!jo.isNull("active") && jo.getBoolean("active")) {
 					piTokenInfo token = decode(jo);
-
-					System.out.println("decodeTokenList 2");
 
 					tokenList.add(token);
 				}

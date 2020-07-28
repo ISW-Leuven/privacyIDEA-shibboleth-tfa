@@ -92,7 +92,7 @@ public class piConnection {
                     httppost.addHeader("Authorization" , tfaAuthToken);
                     httpget.addHeader("Authorization" , tfaAuthToken);
                 } else {
-                    System.out.println("You must authenticate first!");
+                    logger.warn("Not authenticated to use PrivacyIDEA.");
                 }
             }
 
@@ -144,7 +144,7 @@ public class piConnection {
                 if (value.containsKey("token")) {
                     tfaAuthToken = value.getString("token");
                 } else {
-                    System.out.println("Failed to authenticate");
+                    logger.warn("Failed to authenticate to PrivacyIDEA, are your credentials correct?");
                 }
             }
         }  catch (Exception e) {
@@ -222,7 +222,7 @@ public class piConnection {
                     logger.debug("Validation value {}", value);
 
                 if (value) {
-                    System.out.println("Token validated");
+                    logger.debug("Token credentials verified");
                     return true;
                 }
             }
@@ -307,8 +307,6 @@ public class piConnection {
     public List<piTokenInfo> getTokenList(String user) throws piSessionException {
         logger.debug("Trying to retrieve all token for {}", user);
 
-        System.out.println("getTokenList");
-
         CloseableHttpResponse response = null;
 
         try {
@@ -323,8 +321,6 @@ public class piConnection {
 
             return tokenList;
         }  catch (Exception e) {
-            System.out.println(e.getMessage());
-
             logger.debug("Failed to retrieve any token for user", e);
             throw new piSessionException("Failed to retrieve any token for user", e);
         }
