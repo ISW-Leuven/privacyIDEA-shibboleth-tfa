@@ -2,3 +2,9 @@
 .classpath
 .project
 /.settings
+/src/app.java
+
+/.idea/workspace.xml
+/.idea/usage.statistics.xml
+/.idea/tasks.xml
+/.idea/libraries/

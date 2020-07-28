@@ -53,18 +53,24 @@ public class piTokenInfoDecoder {
     	List<piTokenInfo> tokenList = new ArrayList<piTokenInfo>();
 
     	if (status && result.containsKey("value") && result.getJsonObject("value").containsKey("tokens")) {
-        	
         	JsonArray data = result.getJsonObject("value").getJsonArray("tokens");
         	
-        	for (int i=0; i<data.size(); i++) {
+        	for (int i=0; i < data.size(); i++) {
     	        if (logger.isDebugEnabled())
     		    	logger.debug("Processing token {}", i);
-                //System.out.println("Processing token");
+
     	        JsonObject jo = data.getJsonObject(i);
-        		
-    	        piTokenInfo token = decode(jo);
-        		
-        		tokenList.add(token);
+
+				System.out.println("decodeTokenList 1");
+
+    	        // Only add the token if the token is active
+    	        if (!jo.isNull("active") && jo.getBoolean("active")) {
+					piTokenInfo token = decode(jo);
+
+					System.out.println("decodeTokenList 2");
+
+					tokenList.add(token);
+				}
         	}
         	
         }
